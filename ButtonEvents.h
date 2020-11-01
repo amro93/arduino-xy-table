@@ -6,7 +6,8 @@
 
 //---------func declaration ----------
 void MainPageBtnEvents();
-void DistancePageBtnEvents();
+void DistancePageXBtnEvents();
+void DistancePageYBtnEvents();
 void HomingPageBtnEvents();
 void CalibrationXBtnEvents();
 void CalibrationYBtnEvents();
@@ -31,7 +32,8 @@ int PageIndex = 0;
 
 short CalibrationArrX[4] = {0, 1, 0, 0} ;
 short CalibrationArrY[4] = {0, 1, 0, 0} ;
-short DistanceArr[6] = {0, 1, 0, 0, 0, 0} ;
+short DistanceArrX[6] = {0, 1, 0, 0, 0, 0} ;
+short DistanceArrY[6] = {0, 1, 0, 0, 0, 0} ;
 
 int MotorSpeed = 2000;
 int MotorAcceleration = 6000;
@@ -48,7 +50,8 @@ short cancelButtonLevel = 0;
 //  eeMemoryData.motorStepsY = 0;
 //  eeMemoryData.calibrationValueX = 100;
 //  eeMemoryData.calibrationValueY = 100;
-//  eeMemoryData.distanceValue = 100.00f;
+//  eeMemoryData.distanceValueX = 100.00f;
+//  eeMemoryData.distanceValueY = 100.00f;
 //  eeMemoryAccess.SaveData(eeMemoryData.eeAddress, eeMemoryData);
 
 //------- MainPage ------
@@ -146,73 +149,148 @@ void HomingPageBtnEvents() {
   //    ResetMotorsToLimitSwitch(IR01_PIN, IR02_PIN);
   //  }
 }
-//------DistancePage-----
-void DistancePageBtnEvents() {
+
+//------DistancePageY-----
+void DistancePageYBtnEvents() {
   short cursorXPos ;
   okButtonLevel = okButton.GetHoldLevel();
   if (okButtonLevel == 1) {
-    strBuilder.InitializeDistanceArr(DistanceArr, eeMemoryData.distanceValue);
-    DistancePage.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArr);
+    strBuilder.InitializeDistanceArr(DistanceArrY, eeMemoryData.distanceValueY);
+    DistancePageY.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrY);
     NavigateToNextPage(&PageIndex);
   }
   else if (okButtonLevel == 2) { //<<<<<<<<<<<<<<<<< OK
-    eeMemoryData.distanceValue = strBuilder.CalcDistance(DistanceArr);
+    eeMemoryData.distanceValueY = strBuilder.CalcDistance(DistanceArrY);
     eeMemoryAccess.SaveData(eeMemoryData);
   }
   else if (cancelButton.IsPressed()) { //<<<<<<<<<<<<<<<<< CANCEL
     StopMotors();
-    strBuilder.InitializeDistanceArr(DistanceArr, eeMemoryData.distanceValue);
-    DistancePage.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArr);
+    strBuilder.InitializeDistanceArr(DistanceArrY, eeMemoryData.distanceValueY);
+    DistancePageY.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrY);
     NavigateToFirstPage();
   }
   else if (upButton.IsPressed()) { //<<<<<<<<<<<<<<<<< UP
-    if (DistancePage.GetCursorXPos() < 4) {
-      cursorXPos = DistancePage.GetCursorXPos();
+
+    if (DistancePageY.GetCursorXPos() < 4) {
+      cursorXPos = DistancePageY.GetCursorXPos();
     }
-    else if (DistancePage.GetCursorXPos() > 4) {
-      cursorXPos = DistancePage.GetCursorXPos() - 1;
+    else if (DistancePageY.GetCursorXPos() > 4) {
+      cursorXPos = DistancePageY.GetCursorXPos() - 1;
     }
-    if (DistanceArr[cursorXPos] < 9) {
-      DistanceArr[cursorXPos] += 1;
+
+    if (DistanceArrY[cursorXPos] < 9) {
+      DistanceArrY[cursorXPos] += 1;
     }
     else {
-      DistanceArr[cursorXPos] = 0;
+      DistanceArrY[cursorXPos] = 0;
     }
-    DistancePage.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArr);
-    DistancePage.UpdateScreen(lcd);
-    DistancePage.PageDistanceValue = strBuilder.CalcDistance(DistanceArr);
+    DistancePageY.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrY);
+    DistancePageY.UpdateScreen(lcd);
+    DistancePageY.PageDistanceValue = strBuilder.CalcDistance(DistanceArrY);
   }
 
   else if (downButton.IsPressed()) { //<<<<<<<<<<<<<<<<< DOWN
-    if (DistancePage.GetCursorXPos() < 4) {
-      cursorXPos = DistancePage.GetCursorXPos();
+    if (DistancePageY.GetCursorXPos() < 4) {
+      cursorXPos = DistancePageY.GetCursorXPos();
     }
-    else if (DistancePage.GetCursorXPos() > 4) {
-      cursorXPos = DistancePage.GetCursorXPos() - 1;
+    else if (DistancePageY.GetCursorXPos() > 4) {
+      cursorXPos = DistancePageY.GetCursorXPos() - 1;
     }
 
-    if (DistanceArr[cursorXPos] > 0) {
-      DistanceArr[cursorXPos] -= 1;
+    if (DistanceArrY[cursorXPos] > 0) {
+      DistanceArrY[cursorXPos] -= 1;
     }
     else {
-      DistanceArr[cursorXPos] = 9;
+      DistanceArrY[cursorXPos] = 9;
     }
-    DistancePage.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArr);
-    DistancePage.UpdateScreen(lcd);
-    DistancePage.PageDistanceValue = strBuilder.CalcDistance(DistanceArr);
+    DistancePageY.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrY);
+    DistancePageY.UpdateScreen(lcd);
+    DistancePageY.PageDistanceValue = strBuilder.CalcDistance(DistanceArrY);
   }
 
 
   else if (rightButton.IsPressed()) { //<<<<<<<<<<<<<<<<< RIGHT
-    DistancePage.MoveCursorX(lcd, 1);
-    if (DistancePage.GetCursorXPos() == 4) {
-      DistancePage.MoveCursorX(lcd, 1);
+    DistancePageY.MoveCursorX(lcd, 1);
+    if (DistancePageY.GetCursorXPos() == 4) {
+      DistancePageY.MoveCursorX(lcd, 1);
     }
   }
   else if (leftButton.IsPressed()) { //<<<<<<<<<<<<<<<<< LEFT
-    DistancePage.MoveCursorX(lcd, -1);
-    if (DistancePage.GetCursorXPos() == 4) {
-      DistancePage.MoveCursorX(lcd, -1);
+    DistancePageY.MoveCursorX(lcd, -1);
+    if (DistancePageY.GetCursorXPos() == 4) {
+      DistancePageY.MoveCursorX(lcd, -1);
+    }
+  }
+}
+
+
+//------DistancePageX-----
+void DistancePageXBtnEvents() {
+  short cursorXPos ;
+  okButtonLevel = okButton.GetHoldLevel();
+  if (okButtonLevel == 1) {
+    strBuilder.InitializeDistanceArr(DistanceArrX, eeMemoryData.distanceValueX);
+    DistancePageX.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrX);
+    NavigateToNextPage(&PageIndex);
+  }
+  else if (okButtonLevel == 2) { //<<<<<<<<<<<<<<<<< OK
+    eeMemoryData.distanceValueX = strBuilder.CalcDistance(DistanceArrX);
+    eeMemoryAccess.SaveData(eeMemoryData);
+  }
+  else if (cancelButton.IsPressed()) { //<<<<<<<<<<<<<<<<< CANCEL
+    StopMotors();
+    strBuilder.InitializeDistanceArr(DistanceArrX, eeMemoryData.distanceValueX);
+    DistancePageX.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrX);
+    NavigateToFirstPage();
+  }
+  else if (upButton.IsPressed()) { //<<<<<<<<<<<<<<<<< UP
+    if (DistancePageX.GetCursorXPos() < 4) {
+      cursorXPos = DistancePageX.GetCursorXPos();
+    }
+    else if (DistancePageX.GetCursorXPos() > 4) {
+      cursorXPos = DistancePageX.GetCursorXPos() - 1;
+    }
+    if (DistanceArrX[cursorXPos] < 9) {
+      DistanceArrX[cursorXPos] += 1;
+    }
+    else {
+      DistanceArrX[cursorXPos] = 0;
+    }
+    DistancePageX.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrX);
+    DistancePageX.UpdateScreen(lcd);
+    DistancePageX.PageDistanceValue = strBuilder.CalcDistance(DistanceArrX);
+  }
+
+  else if (downButton.IsPressed()) { //<<<<<<<<<<<<<<<<< DOWN
+    if (DistancePageX.GetCursorXPos() < 4) {
+      cursorXPos = DistancePageX.GetCursorXPos();
+    }
+    else if (DistancePageX.GetCursorXPos() > 4) {
+      cursorXPos = DistancePageX.GetCursorXPos() - 1;
+    }
+
+    if (DistanceArrX[cursorXPos] > 0) {
+      DistanceArrX[cursorXPos] -= 1;
+    }
+    else {
+      DistanceArrX[cursorXPos] = 9;
+    }
+    DistancePageX.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrX);
+    DistancePageX.UpdateScreen(lcd);
+    DistancePageX.PageDistanceValue = strBuilder.CalcDistance(DistanceArrX);
+  }
+
+
+  else if (rightButton.IsPressed()) { //<<<<<<<<<<<<<<<<< RIGHT
+    DistancePageX.MoveCursorX(lcd, 1);
+    if (DistancePageX.GetCursorXPos() == 4) {
+      DistancePageX.MoveCursorX(lcd, 1);
+    }
+  }
+  else if (leftButton.IsPressed()) { //<<<<<<<<<<<<<<<<< LEFT
+    DistancePageX.MoveCursorX(lcd, -1);
+    if (DistancePageX.GetCursorXPos() == 4) {
+      DistancePageX.MoveCursorX(lcd, -1);
     }
   }
 }

@@ -22,10 +22,12 @@ void InitializeFromMemory() {
   MainPage.SetCursorXPos(lcd, eeMemoryData.tablePosX * 2);
   MainPage.SetCursorYPos(lcd, eeMemoryData.tablePosY);
 
-  strBuilder.InitializeDistanceArr( DistanceArr , eeMemoryData.distanceValue);
+  strBuilder.InitializeDistanceArr( DistanceArrX , eeMemoryData.distanceValueX);
+  strBuilder.InitializeDistanceArr( DistanceArrY , eeMemoryData.distanceValueY);
   strBuilder.InitializeCalibrationArr( CalibrationArrX , eeMemoryData.calibrationValueX);
   strBuilder.InitializeCalibrationArr( CalibrationArrY , eeMemoryData.calibrationValueY);
-  DistancePage.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArr);
+  DistancePageX.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrX);
+  DistancePageY.PageStringArr[0] = strBuilder.GetDistanceString(DistanceArrY);
   CalibrationX.PageStringArr[0] = strBuilder.GetCalibrationString(CalibrationArrX);
   CalibrationY.PageStringArr[0] = strBuilder.GetCalibrationString(CalibrationArrY);
 }
@@ -39,10 +41,15 @@ void ProgramInitialize() {
   MainPage.PageStringArr[1] = "5 6 7 8";
   MainPage.MaxPageWidth = 7;
 
-  //DistancePage.PageStringArr[0] = (String)DistancePage.PageValue;
-  DistancePage.PageStringArr[1] = "Stroke Distance";
-  DistancePage.MaxPageHeight = 1;
-  DistancePage.MaxPageWidth = 7;
+  //DistancePageX.PageStringArr[0] = (String)DistancePageX.PageValue;
+  DistancePageX.PageStringArr[1] = "Stroke Distance";
+  DistancePageX.MaxPageHeight = 1;
+  DistancePageX.MaxPageWidth = 7;
+
+    //DistancePageY.PageStringArr[0] = (String)DistancePageY.PageValue;
+  DistancePageY.PageStringArr[1] = "Stroke Distance";
+  DistancePageY.MaxPageHeight = 1;
+  DistancePageY.MaxPageWidth = 7;
 
   HomingPage.PageStringArr[0] = "";
   HomingPage.PageStringArr[1] = "HOME Position";
@@ -88,15 +95,20 @@ void ProgramLoop() {
       }
     case 2:
       {
-        DistancePageBtnEvents();
+        DistancePageXBtnEvents();
         break;
       }
     case 3:
+    {
+      DistancePageYBtnEvents();
+      break;
+    }
+    case 4:
       {
         CalibrationXBtnEvents();
         break;
       }
-    case 4:
+    case 5:
       {
         CalibrationYBtnEvents();
         break;
@@ -133,8 +145,8 @@ void NavigateToNextPage(int* pageIndex) {
 
 
 void SetMotorsTargetPosition() {
-  stepperX.moveTo(eeMemoryData.distanceValue * eeMemoryData.tablePosX * eeMemoryData.calibrationValueX * MotorDirectionX);
-  stepperY.moveTo(eeMemoryData.distanceValue * eeMemoryData.tablePosY * eeMemoryData.calibrationValueY * MotorDirectionY);
+  stepperX.moveTo(eeMemoryData.distanceValueX * eeMemoryData.tablePosX * eeMemoryData.calibrationValueX * MotorDirectionX);
+  stepperY.moveTo(eeMemoryData.distanceValueY * eeMemoryData.tablePosY * eeMemoryData.calibrationValueY * MotorDirectionY);
 }
 
 void StopMotors() {
@@ -157,7 +169,8 @@ void ResetEEpromRecords() {
   eeMemoryData.motorStepsY = 0;
   eeMemoryData.calibrationValueX = 100;
   eeMemoryData.calibrationValueY = 100;
-  eeMemoryData.distanceValue = 100.00f;
+  eeMemoryData.distanceValueX = 100.00f;
+  eeMemoryData.distanceValueY = 100.00f;
 
   EEPROM.put(eeMemoryData.eeAddress, eeMemoryData);
   InitializeFromMemory();

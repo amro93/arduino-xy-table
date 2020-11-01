@@ -23,13 +23,14 @@ Button iRY_Button(IR02_PIN);
 
 //---- LCD Pages ----
 LCDPage MainPage;
-LCDPage DistancePage;
+LCDPage DistancePageX;
+LCDPage DistancePageY;
 LCDPage HomingPage;
 LCDPage CalibrationX;
 LCDPage CalibrationY;
 
-const int PagesSize = 5;
-LCDPage* Pages[PagesSize] = {&MainPage, &HomingPage, &DistancePage, &CalibrationX, &CalibrationY};
+const int PagesSize = 6;
+LCDPage* Pages[PagesSize] = {&MainPage, &HomingPage, &DistancePageX, &DistancePageY, &CalibrationX, &CalibrationY};
 
 //--- Stepper Motors ---
 AccelStepper stepperX(1, STEPPER_X_CLOCK, STEPPER_X_DIRECTION);

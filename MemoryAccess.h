@@ -11,7 +11,8 @@ struct MemoryData {
   unsigned long motorStepsY;
   int calibrationValueX;
   int calibrationValueY;
-  float distanceValue;
+  float distanceValueX;
+  float distanceValueY;
   short eeAddress = 0;
 };
 class MemoryAccess {
