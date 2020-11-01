@@ -42,12 +42,12 @@ void ProgramInitialize() {
   MainPage.MaxPageWidth = 7;
 
   //DistancePageX.PageStringArr[0] = (String)DistancePageX.PageValue;
-  DistancePageX.PageStringArr[1] = "Stroke Distance";
+  DistancePageX.PageStringArr[1] = "Stroke DistanceX";
   DistancePageX.MaxPageHeight = 1;
   DistancePageX.MaxPageWidth = 7;
 
     //DistancePageY.PageStringArr[0] = (String)DistancePageY.PageValue;
-  DistancePageY.PageStringArr[1] = "Stroke Distance";
+  DistancePageY.PageStringArr[1] = "Stroke DistanceY";
   DistancePageY.MaxPageHeight = 1;
   DistancePageY.MaxPageWidth = 7;
 
