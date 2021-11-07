@@ -10,3 +10,4 @@ Features
 - Build was made for Arduino NANO but it should work on all boards
 - Easy to configure pins map
 - Buttons (up, down, left, right, ok, cancel)
+- Axes limit switches
