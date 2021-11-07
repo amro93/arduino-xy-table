@@ -13,6 +13,7 @@ Features
 - Axes limit switches
 
 Code was developed on 2017 in for a freelance project.
+
 Technologies used:
 - Control KIT:  Arduino NANO
 - Mechanical Design: Autodesk Inventor (Sheet Metal)
